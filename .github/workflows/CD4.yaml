@@ -1,7 +1,7 @@
-name: CI-4-Limpieza-Silencio
-on: [push]
+name: CD-4-Javadoc-Pages
+on: [workflow_dispatch]
 jobs:
-  clean-build:
+  docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -9,5 +9,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-      - name: Maven Clean Batch
-        run: mvn -B clean test # -B para modo batch
+      - run: mvn javadoc:javadoc
+      - name: Deploy to Pages
+        uses: JamesIves/github-pages-deploy-action@v4 # Acción recomendada 
+        with:
+          folder: target/site/apidocs
+          branch: gh-pages

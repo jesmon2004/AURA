@@ -1,9 +1,7 @@
-name: CI-2-Filtro-Desarrollo
-on:
-  push:
-    branches: [ "feature-dev" ] # Solo en esta rama 
+name: CD-2-Almacen-Ejecutables
+on: [workflow_dispatch]
 jobs:
-  test:
+  package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -11,5 +9,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-      - name: Compilar y Test
-        run: mvn test
+      - name: Build WAR
+        run: mvn package -DskipTests # Omite tests para rapidez 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Demo4-TypingTest-WAR
+          path: target/*.war # Sube el ejecutable 

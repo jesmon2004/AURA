@@ -1,19 +1,15 @@
-name: CI-6-Evidencias-Desastre
-on: [push]
+name: CD-6-Despliegue-SSH
+on: [workflow_dispatch]
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - run: mvn package -DskipTests
+      - name: SCP Transfer
+        uses: appleboy/scp-action@v0.1.7 # Acción recomendada 
         with:
-          java-version: '21'
-          distribution: 'zulu'
-      - name: Run Tests
-        run: mvn test
-      - name: Upload Reports on Failure
-        if: failure() # Condición de fallo
-        uses: actions/upload-artifact@v4
-        with:
-          name: surefire-reports
-          path: target/surefire-reports/
+          host: ${{ secrets.REMOTE_IP }} # Secreto configurado 
+          key: ${{ secrets.SSH_KEY }}
+          source: "target/*.war"
+          target: "/home/usuario/despliegues"

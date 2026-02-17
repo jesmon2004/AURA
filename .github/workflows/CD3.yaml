@@ -1,14 +1,14 @@
-name: CI-3-Estandar-Java21
-on: [push]
+name: CD-3-Release-Oficial
+on:
+  push:
+    tags: [ 'v*' ] # Filtro de etiqueta 
 jobs:
-  check-version:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Configurar Java 21 Zulu
-        uses: actions/setup-java@v4
+      - run: mvn package -DskipTests
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          java-version: '21' # Versión requerida 
-          distribution: 'zulu' # Distribución requerida 
-      - name: Verificar
-        run: java -version
+          files: target/*.war
