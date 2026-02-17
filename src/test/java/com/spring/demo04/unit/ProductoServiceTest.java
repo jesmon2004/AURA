@@ -41,7 +41,7 @@ class ProductoServiceTest {
 
         Producto guardado = service.crearEnMercado(1L, p);
 
-        assertEquals("Tomates2", guardado.getNombre());
+        assertEquals("Tomates", guardado.getNombre());
         assertNotNull(guardado.getMercado());
         assertEquals("Mercado Norte", guardado.getMercado().getNombre());
         verify(prodRepo, times(1)).save(any(Producto.class));

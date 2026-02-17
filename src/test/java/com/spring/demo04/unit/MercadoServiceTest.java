@@ -18,11 +18,6 @@ import com.spring.demo04.model.Mercado;
 import com.spring.demo04.repository.MercadoRepository;
 import com.spring.demo04.service.impl.MercadoServiceImpl;
 
-/**
- * UNIT TEST (MercadoService):
- * - Mockeamos el repository
- * - Probamos solo la lógica del service
- */
 class MercadoServiceTest {
 
     @Test
@@ -38,7 +33,8 @@ class MercadoServiceTest {
         Mercado resultado = service.crear(entrada);
 
         assertNotNull(resultado);
-        assertEquals("Mercado Central1", resultado.getNombre());
+        // CORREGIDO: quitado el "1" que hacía fallar el test
+        assertEquals("Mercado Central", resultado.getNombre());
         verify(repo, times(1)).save(any(Mercado.class));
     }
 
