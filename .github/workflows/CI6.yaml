@@ -1,0 +1,19 @@
+name: CI-6-Evidencias-Desastre
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+      - name: Run Tests
+        run: mvn test
+      - name: Upload Reports on Failure
+        if: failure() # Condición de fallo
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/

@@ -1,0 +1,14 @@
+name: CI-3-Estandar-Java21
+on: [push]
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configurar Java 21 Zulu
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21' # Versión requerida 
+          distribution: 'zulu' # Distribución requerida 
+      - name: Verificar
+        run: java -version

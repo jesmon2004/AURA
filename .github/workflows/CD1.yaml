@@ -1,0 +1,13 @@
+name: CI-1-Vigilante-Universal
+on: [push] # Escucha en todas las ramas por defecto 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+      - name: Compilar con Maven
+        run: mvn compile

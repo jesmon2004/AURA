@@ -1,0 +1,15 @@
+name: CI-7-Camaleon-Multiplataforma
+on: [push]
+jobs:
+  matrix-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest] # Matriz de SO 
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+      - run: mvn test
