@@ -1,13 +1,29 @@
 name: CI-8-SecOps-Vulnerabilidades
 on: [push]
+
 jobs:
-  security:
+  analisis-seguridad:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'zulu'
-      - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check # Invocación del plugin 
+          distribution: 'temurin' # Usamos Temurin como tu compañero
+          cache: 'maven'
+
+      - name: Analizar dependencias (OWASP)
+        # Añadimos -Dformat=HTML para generar un informe legible
+        run: mvn org.owasp:dependency-check-maven:check -Dformat=HTML
+
+      - name: Subir Reporte de Seguridad
+        # Importante: "if: always()" asegura que el reporte se suba
+        # AUNQUE el paso anterior haya fallado (X roja).
+        if: always() 
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-owasp-seguridad
+          path: target/dependency-check-report.html
