@@ -1,0 +1,7 @@
+com.spring.demo04
+com.spring.demo04.controller
+com.spring.demo04.exception
+com.spring.demo04.model
+com.spring.demo04.repository
+com.spring.demo04.service
+com.spring.demo04.service.impl
