@@ -1,7 +1,6 @@
 name: CD-4-Javadoc-Pages
 on: [workflow_dispatch]
 
-# ESTO ES LO QUE TE FALTABA: Permisos para escribir en la rama de la web
 permissions:
   contents: write
 
@@ -15,13 +14,14 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
+          cache: 'maven'
           
       - name: Generar Javadoc
-        # Añadimos -DfailOnError=false para que no se rompa por warnings tontos
-        run: mvn javadoc:javadoc -DfailOnError=false
+        # CORRECCIÓN: Compilamos primero y usamos la versión 3.6.3 del plugin explícitamente
+        run: mvn -B clean compile org.apache.maven.plugins:maven-javadoc-plugin:3.6.3:javadoc -Ddoclint:none
         
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: target/site/apidocs # La carpeta donde Maven guarda el Javadoc
-          branch: gh-pages            # La rama donde se publicará la web
+          folder: target/site/apidocs
+          branch: gh-pages
