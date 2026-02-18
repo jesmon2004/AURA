@@ -1,14 +1,30 @@
 name: CD-3-Release-Oficial
 on:
   push:
-    tags: [ 'v*' ] # Filtro de etiqueta 
+    tags:
+      - 'v*' # Se activa al subir un tag como v1.0.0
+
+# 1. PERMISOS OBLIGATORIOS para crear la Release
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: mvn package -DskipTests
+      
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          
+      - name: Build WAR
+        # 2. AÑADIDO: El flag para que no falle por falta de web.xml
+        run: mvn package -DskipTests -DfailOnMissingWebXml=false
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: target/*.war
+          generate_release_notes: true # Opcional: genera notas automáticas
